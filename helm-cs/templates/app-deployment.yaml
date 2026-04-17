@@ -1,12 +1,18 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1 
+kind: Rollout
 metadata:
   name: skillexchange-app
   labels:
     app: skillexchange-app
     version: v1
 spec:
-  replicas: 3
+  replicas: 3 
+  strategy:
+    blueGreen: 
+      activeService: skillexchange-active-service
+      previewService: skillexchange-preview-service
+      autoPromotionEnabled: false
+      scaleDownDelaySeconds: 30
   selector:
     matchLabels:
       app: skillexchange-app
