@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/chandana-harish/CSEB_MID.git
     targetRevision: main
-    path: helm
+    path: helm-cs
     helm:
       values: |
         userprofile:
