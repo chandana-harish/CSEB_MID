@@ -48,7 +48,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD}}
-          subject: BUILD FAILED
+          subject: "BUILD FAILED"
           body: "quality gate FAILED"
           from: GitHub Actions
           to: ${{ secrets.EMAIL_USERNAME }}
