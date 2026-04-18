@@ -15,6 +15,8 @@ jobs:
     permissions:
       contents: read
       packages: write  
+    environment: 
+      name: production
     steps:
       - uses: actions/checkout@v4 
         with: 
@@ -63,48 +65,32 @@ jobs:
       - name: Push to Hub
         run: docker push ${{secrets.DOCKER_USERNAME}}/${{env.IMAGE_NAME}}:${{inputs.release_tag}}
     
-  deploy:
-      name: Deploy (Manual Approval)
-      runs-on: ubuntu-latest
-      needs: build
 
-      environment:
-        name: production   # 👈 THIS enables manual approval
 
-      steps:
-        - name: Deploy step
-          run: echo "Deploying after approval..."
-  notify:
-      name: Notify
-      runs-on: ubuntu-latest
-      needs: build
-      
-
-      steps:
-        - name: send success email 
-          if: success()
-          uses: dawidd6/action-send-mail@v3
-          with:
-            server_address: smtp.gmail.com
-            server_port: 465
-            username: ${{ secrets.EMAIL_USERNAME }}
-            password: ${{ secrets.EMAIL_PASSWORD }}
-            subject: "BUILD SUCCESS"
-            body: "quality gate success"
-            from: GitHub Actions
-            to: ${{ secrets.EMAIL_USERNAME }} 
-        - name: send failure email 
-          if: failure()
-          uses: dawidd6/action-send-mail@v3
-          with:
-            server_address: smtp.gmail.com
-            server_port: 465
-            username: ${{ secrets.EMAIL_USERNAME }}
-            password: ${{ secrets.EMAIL_PASSWORD }}
-            subject: "BUILD FAILED"
-            body: "quality gate FAILED"
-            from: GitHub Actions
-            to: ${{ secrets.EMAIL_USERNAME }} 
+      - name: send success email 
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "BUILD SUCCESS"
+          body: "quality gate success"
+          from: GitHub Actions
+          to: ${{ secrets.EMAIL_USERNAME }} 
+      - name: send failure email 
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "BUILD FAILED"
+          body: "quality gate FAILED"
+          from: GitHub Actions
+          to: ${{ secrets.EMAIL_USERNAME }} 
 
 
  
